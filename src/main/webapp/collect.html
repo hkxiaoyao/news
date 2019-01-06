@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收藏页面</title>
+</head>
+<body>
+<div class="user-bar" style="height:30px; background:#f5f6f7;border-radius:4px;">
+    <div class="col-md-2">
+        <a href="#/user/collect"><h5 class="text-center" style="margin-top:8px;">收 藏</h5></a>
+    </div>
+    <div class="col-md-2">
+        <a href="#/user/subscribe"><h5 class="text-center" style="margin-top:8px;">订 阅</h5></a>
+    </div>
+    <div class="col-md-2">
+        <a href="#/user/info"><h5 class="text-center" style="margin-top:8px;">个人信息</h5></a>
+    </div>
+</div>
+<div class="content" ng-controller="collect">
+    <table class="table table-hover" style="margin-top:10px;">
+        <tr ng-repeat="news in collectionNews">
+            <td width="600px;">
+                <div><h3><a href="#/detail/{{news.newsId}}" ng-bind="news.title"
+                            style="text-decoration:none;color:#000;"></a></h3></div>
+                <a href="#/detail/{{news.newsId}}" style="text-decoration:none;color:#000;">
+                    <div ng-bind="news.summary"></div>
+                </a></td>
+            <td class="text-center" style="vertical-align:middle">作者：<span ng-bind="news.author"></span>&nbsp;-&nbsp;
+                时间：<span ng-bind="news.createTime |date:'yyyy-MM-dd HH:mm'"></span></td>
+            <td style="vertical-align:middle"><a href="javascript:" style="color: #fa9700;"
+                                                 ng-click="cancelCollection(news.newsId)">取消收藏</a></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

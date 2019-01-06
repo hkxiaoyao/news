@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ming.news.dao.NewsDao">
+    <delete id="deleteCollection">
+        delete
+        from collection
+        where user_id = #{userId}
+          and news_id = #{newsId}
+    </delete>
+    <delete id="deleteNews">
+        DELETE
+        from news
+        where news_id = #{newsId}
+    </delete>
+    <insert id="insert" parameterType="com.ming.news.model.po.News" useGeneratedKeys="true"
+            keyProperty="news.newsId">
+        insert into news (title, summary,
+                          `state`, create_time,
+                          update_time, user_id, pv, content, category_id)
+        values (#{news.title}, #{news.summary},
+                #{news.state}, #{news.createTime},
+                #{news.updateTime}, #{news.userId}, #{news.pv}, #{news.content}, #{news.category.categoryId})
+    </insert>
+    <insert id="insertTag" useGeneratedKeys="true" keyProperty="tag.tagId">
+        insert into tag(tag_name)
+        values (#{tag.tagName})
+    </insert>
+    <insert id="insertNewsTagRelation">
+        INSERT into news_tag(news_id, tag_id) VALUES
+
+        <foreach collection="tagIds" index="index" item="tagId" separator=",">
+            (#{newsId}, #{tagId})
+        </foreach>
+    </insert>
+    <insert id="insertCollection">
+        INSERT into collection(news_id, user_id)
+        VALUES (#{newsId}, #{userId})
+    </insert>
+    <update id="updatePv">
+        update news
+        set pv = pv + 1
+        where news_id = #{newsId};
+    </update>
+    <update id="updateComment">
+        update news
+        set comment_number = comment_number + 1
+        where news_id = #{newsId};
+    </update>
+    <update id="updateCollection">
+        update news
+        set collection = collection + 1
+        where news_id = #{newsId};
+    </update>
+    <update id="decreaseCollection">
+        update news
+        set collection = collection - 1
+        where news_id = #{newsId};
+    </update>
+    <select id="findByTagName" resultType="com.ming.news.model.po.Tag">
+        SELECT *
+        from tag
+        where tag_name = #{tagName}
+    </select>
+
+    <select id="getRealtimeNews" resultType="com.ming.news.model.po.News">
+        SELECT news_id, title
+        from news
+        limit 5
+    </select>
+    <select id="getIndexNews" resultType="com.ming.news.model.po.IndexNews">
+        SELECT *
+        from index_news
+        where category_id = #{categoryId}
+    </select>
+    <select id="getNewsDetail" resultType="com.ming.news.model.po.NewsDetail">
+        SELECT *
+        from news_detail
+        where news_id = #{newsId}
+    </select>
+
+    <select id="getComment" resultMap="commentMap">
+        SELECT comment_id,
+               content,
+               c.create_time,
+               u.user_id,
+               nickname,
+               image_path
+        from user u,
+             comment c
+        where u.user_id = c.user_id
+          and c.news_id = #{newsId}
+    </select>
+    <select id="getTags" resultType="com.ming.news.model.po.Tag">
+        SELECT t.tag_id, t.tag_name
+        from news_tag nt
+                 left join tag t on t.tag_id = nt.tag_id
+                 left join news n on nt.news_id = n.news_id
+        where n.news_id = #{newsId}
+    </select>
+    <select id="findCollection" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        from collection
+        where user_id = #{userId}
+          and news_id = #{newsId}
+    </select>
+    <select id="getCollectionNews" resultType="com.ming.news.model.po.CollectionNews">
+        SELECT *
+        FROM collection_news
+        WHERE user_id = #{userId}
+    </select>
+    <select id="getMyNews" resultType="com.ming.news.model.po.News">
+        SELECT news_id,
+               title,
+               summary,
+               create_time,
+               pv,
+               collection,
+               comment_number
+        from news
+        where user_id = #{userId}
+    </select>
+    <select id="getSearchNews" resultType="com.ming.news.model.po.SearchNews">
+        SELECT *
+        from search_news
+        where title like #{param}
+    </select>
+
+    <resultMap id="commentMap" type="com.ming.news.model.po.Comment">
+        <id column="comment_id" property="commentId"/>
+        <result column="content" property="content"/>
+        <result column="create_time" property="createTime"/>
+        <association property="user" column="user_id" javaType="com.ming.news.model.po.User">
+            <id column="user_id" property="userId"/>
+            <result column="nickname" property="nickname"/>
+            <result column="image_path" property="imagePath"/>
+        </association>
+    </resultMap>
+</mapper>

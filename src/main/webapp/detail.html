@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新闻详情</title>
+</head>
+<body>
+<div class="col-md-8">
+    <div class="page-article" ng-controller="detailCtrl">
+        <div class="article-header">
+            <h1 class="title" ng-bind="newsDetail.title"></h1>
+            <span class="sub"><a href="#/author/message/{{newsDetail.authorId}}" ng-bind="newsDetail.author"></a></span>&nbsp;
+            <span class="sub" ng-bind="newsDetail.createTime|date:' yyyy-MM-dd HH:mm'"></span>
+            &nbsp;&nbsp;阅读量
+            <span class="sub" ng-bind="newsDetail.pv"></span>
+            <span class="right"><a href="javascript:" ng-click="addcollection(newsDetail.newsId)">收藏</a></span>
+        </div>
+        <div class="article-content detail-content" ng-bind-html="newsDetail.content | to_html"></div>
+        <div class="article-comment">
+            <div class="article-comment-head">
+                <div class="dtag">文章评论</div>
+                <div style="float:right"> 共<span ng-bind="newsDetail.commentNumber"></span>条,&nbsp;<a href="javascript:"
+                                                                                                      ng-click="commentView()">点击评论</a>
+                </div>
+            </div>
+            <div ng-hide="commentdisplay">
+                <div><label>
+                    <textarea cols="100" rows="6" style="resize:none;width:100%;" ng-model="userComment"></textarea>
+                </label>
+                </div>
+                <div style="margin-bottom:80px;margin-top:5px;">
+                    <button class="btn" style="background-color:#ed4040;color:#FFF;float:right;"
+                            ng-click="commentSubmit(newsDetail.newsId)">发表评论
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="article-comment-content clearfix">
+
+            <ul style="list-style: outside none none;padding:0;" class="clearfix">
+                <li style="margin-bottom: 30px;margin-top:10px;" ng-repeat="comment in comments">
+                    <div>
+                        <div>
+                            <img ng-src="{{comment.user.imagePath}}" width="50px" height="50px"
+                                 style="border-radius: 30px;float:left;margin-right:10px;">
+                        </div>
+                        <div>
+                            <div style="margin-bottom:10px;"><a href="" style="color: #406599;"
+                                                                ng-bind="comment.user.nickname"></a></div>
+                            <div style="font-size:16px;padding-left:60px;" ng-bind="comment.content"></div>
+                        </div>
+                    </div>
+                    <div style="float:right;" ng-bind="comment.createTime|date:' yyyy-MM-dd HH:mm'"></div>
+                </li>
+            </ul>
+            <a class="loadmore" href="javascript:" style="margin: 50px 0px 10px 0px;">已无更多</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

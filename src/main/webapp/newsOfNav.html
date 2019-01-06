@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="col-md-2  navber-default navbar" style="margin-right:-4%" ng-controller="navCtrl">
+    <ul class="nav nav-pills nav-stacked navul">
+        <li ng-repeat="category in categories"><a href="#/index/{{category.categoryId}}"><h4
+                ng-bind="category.newsCategoryName"></h4><H4 ng-hide="category.categoryId"></H4></a></li>
+    </ul>
+</div>
+</body>
+</html>

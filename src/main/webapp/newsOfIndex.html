@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="indexCtrl">
+    <div class="col-md-7">
+        <div class="news-content">
+            <ul>
+                <li ng-repeat="news in indexNews">
+                    <div class="item">
+                        <div class="box" style="width:575px;">
+                            <div class="list-tittle"><a href="#/detail/{{news.newsId}}" class="index-title"
+                                                        style="text-decoration:none;" ng-bind="news.title"></a></div>
+                            <a href="#/detail/{{news.newsId}}" style="text-decoration:none;">
+                                <div class="list-abstract" ng-bind="news.summary"></div>
+                            </a>
+                            <div class="list-footer" style="width:575px;">
+										<span>
+											<span ng-bind="news.author">用户名</span>&nbsp;-&nbsp;
+											<span ng-bind="news.commentNumber+'条评论'"></span>
+                                            &nbsp;&nbsp;阅读量
+                                            <span ng-bind="news.pv"></span>
+										</span>
+                                <span class="right list-time" ng-bind="news.createTime |date:'yyyy-MM-dd HH:mm'"></span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <a class="loadmore" href="javascript:">已无更多</a>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="index-right">
+            <div class="head"> 实时要闻</div>
+            <div class="news">
+                <a href="#/detail/{{news.newsId}}" ng-repeat="news in realtimeNews" ng-bind="news.title"></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

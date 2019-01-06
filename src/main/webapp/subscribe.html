@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>订阅详情</title>
+</head>
+<body>
+<div class="user-bar" style="height:30px; background:#f5f6f7;border-radius:4px;">
+    <div class="col-md-2">
+        <a href="#/user/collect"><h5 class="text-center" style="margin-top:8px;">收 藏</h5></a>
+    </div>
+    <div class="col-md-2">
+        <a href="#/user/subscribe"><h5 class="text-center" style="margin-top:8px;">订 阅</h5></a>
+    </div>
+    <div class="col-md-2">
+        <a href="#/user/info"><h5 class="text-center" style="margin-top:8px;">个人信息</h5></a>
+    </div>
+</div>
+<div class="content" style="width:1000px;" ng-controller="subscription">
+    <ul style="width:1400px;;display: inline-block;" class="list-inline">
+        <li ng-repeat="author in authors" class="clearfix"
+            style="list-style-type: none; margin-left:16px;border-right: 1px dotted #e5e5e5;border-left: 1px dotted #e5e5e5; margin-right: 42px;display: inline-block;height: 80px;overflow: hidden;padding: 24px 0;position: relative;    width: 340px;   padding-right: 41px;padding-left:10px;">
+            <div style=" float: left; height: 70px;  margin-right: 10px;  width: 40px;">
+                <a href="#/author/message/{{author.userId}}">
+                    <img ng-src="{{author.imagePath}}" width="65px" height="65px;"
+                         style="border-radius: 20px;  height: 40px;  width: 40px;">
+                </a>
+            </div>
+            <div style="float: left;  width: 180px;">
+                <p style="color: #4f5157;    font-size: 18px;    overflow-x: hidden;    text-overflow: ellipsis;    white-space: nowrap;">
+                    <a href="#/author/message/{{author.userId}}" style="color:#000;" ng-bind="author.nickname"></a>
+                </p>
+                <p style="color: #6b6b6b;font-size: 12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap; width: 140px;"
+                   ng-bind="author.briefIntroduction">
+                </p>
+            </div>
+            <div style="margin-top:10px;"><a href="javascript:" ng-click="cancelSubscription(author.userId)">取消订阅</a>
+            </div>
+        </li>
+
+    </ul>
+</div>
+</body>
+</html>

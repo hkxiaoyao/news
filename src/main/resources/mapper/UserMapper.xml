@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ming.news.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.ming.news.model.po.User">
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="image_path" jdbcType="VARCHAR" property="imagePath"/>
+        <result column="brief_introduction" jdbcType="VARCHAR" property="briefIntroduction"/>
+        <result column="subscribe_number" jdbcType="SMALLINT" property="subscribeNumber"/>
+        <result column="create_time" jdbcType="DATE" property="createTime"/>
+    </resultMap>
+    <insert id="addUser" parameterType="com.ming.news.model.po.User" useGeneratedKeys="true"
+            keyProperty="user.userId">
+        insert into user (nickname, username, `password`, image_path, create_time)
+        values (#{user.nickname}, #{user.username},
+                #{user.password}, #{user.imagePath},
+                #{user.createTime})
+    </insert>
+    <insert id="subscribeAuthor">
+        insert into subscribe (user_id, author_id)
+        values (#{userId}, #{authorId});
+    </insert>
+    <update id="increaseSubscribeNumber">
+        UPDATE user
+        set subscribe_number = subscribe_number + 1
+        where user_id = #{userId}
+    </update>
+    <update id="updateImage">
+        update user
+        set image_path = #{imagePath}
+        where user_id = #{userId}
+    </update>
+    <update id="updateIntroduction">
+        update user
+        set brief_introduction = #{content}
+        where user_id = #{userId}
+    </update>
+    <update id="decreaseSubscribeNumber">
+        UPDATE user
+        set subscribe_number = subscribe_number - 1
+        where user_id = #{userId}
+    </update>
+    <delete id="cancelSubscribeAuthor">
+        delete
+        from subscribe
+        where user_id = #{userId}
+          and author_id = #{authorId}
+    </delete>
+
+    <select id="findUserByUsernameAndPassWord" resultType="com.ming.news.model.po.User">
+        SELECT *
+        from user
+        where password = #{password}
+          and username = #{username}
+    </select>
+    <select id="findUserByUsername" resultType="com.ming.news.model.po.User">
+        SELECT *
+        from user
+        where username = #{username}
+    </select>
+    <select id="getAuthorInfo" resultMap="authorMap">
+        SELECT n.news_id,
+               n.title,
+               n.summary,
+               n.pv,
+               n.create_time,
+               n.comment_number,
+               u.user_id,
+               u.create_time,
+               u.image_path,
+               u.nickname,
+               u.brief_introduction,
+               u.subscribe_number
+        from user u,
+             news n
+        where n.user_id = u.user_id
+          and u.user_id = #{authorId}
+        order by n.create_time desc
+    </select>
+    <select id="getSubscription" resultType="com.ming.news.model.po.User">
+        SELECT u.user_id, u.nickname, u.brief_introduction, u.image_path
+        from user u
+                 left join subscribe s on u.user_id = s.author_id
+        where s.user_id = #{userId}
+    </select>
+    <select id="findSubscription" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        from subscribe
+        where user_id = #{userId}
+          and author_id = #{authorId}
+    </select>
+
+    <resultMap id="authorMap" type="com.ming.news.model.po.User">
+        <id column="user_id" property="userId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="image_path" property="imagePath"/>
+        <result column="nickname" property="nickname"/>
+        <result column="brief_introduction" property="briefIntroduction"/>
+        <result column="subscribe_number" property="subscribeNumber"/>
+        <collection property="newsList" ofType="com.ming.news.model.po.News">
+            <id column="news_id" property="newsId"/>
+            <result column="title" property="title"/>
+            <result column="summary" property="summary"/>
+            <result column="create_time" property="createTime"/>
+            <result column="pv" property="pv"/>
+            <result column="comment_number" property="commentNumber"/>
+        </collection>
+    </resultMap>
+</mapper>

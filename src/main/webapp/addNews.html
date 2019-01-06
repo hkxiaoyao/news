@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>写新闻</title>
+    <!--style给定宽度可以影响编辑器的最终宽度-->
+</head>
+<body>
+<div style="width:1000px;">
+    <div class="user-bar" style="height:30px; background:#f5f6f7;border-radius:4px;">
+        <div class="col-xs-2">
+            <h5 class="text-center" style="margin-top:8px;color: #fa9700;"><a href="#/user/myNews">个人主页</a></h5>
+        </div>
+        <div class="col-xs-2">
+            <h5 class="text-center" style="margin-top:8px;color: #fa9700;"><a href="#/user/addNews">发表文章</a></h5>
+        </div>
+    </div>
+    <div class="content clearfix" style="margin-top:30px;" ng-controller="addnewsCtrl">
+        <!-- 这里是内容 -->
+        <div>
+            <form class="form-inline">
+                <input type="text" class="form-control" id="productname"
+                       style="width:60%;font-size: 18px;font-weight: 700;" placeholder="文章标题" ng-model="title">
+                <input type="text" class="form-control" id="tag"
+                       style="width:22%;font-size: 18px;font-weight: 700;" placeholder="文章标签,用#隔开" ng-model="tag">
+
+                <div class="form-group">
+                    <label for="category" style="color: #999;opacity: 1;">&nbsp;&nbsp;文章类型：</label>
+                    <select ng-options="a.newsCategoryName for a in categories" ng-model="category2" id="category"
+                            style="height:32px;;width:80px;border: 1px solid #ccc;border-radius: 4px;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;">
+                    </select>
+                </div>
+
+            </form>
+        </div>
+        <div>
+            <script type="text/plain" id="myEditor" style="width:1000px;height:360px;"/>
+        </div>
+
+        <div class="clear"></div>
+        <div id="btns" style="margin-top:5px;margin-bottom:20px;">
+            <div style="float:right;">
+                <button class="btn" style="width:100px;background-color:#ed4040;color:#FFF;" ng-click="submit()">提交
+                </button>
+                <button class="btn" style="background-color:#e0e0e0;color:#FFF;"> 取消</button>
+            </div>
+        </div>
+        <script type="text/javascript">
+            var um;
+            if (um) {
+                um.destroy();
+            }
+            um = UM.getEditor('myEditor');
+        </script>
+        <!-- 内容结束 -->
+    </div>
+</div>
+</body>
+</html>

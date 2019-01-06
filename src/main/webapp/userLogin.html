@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=GB18030">
+    <title>Insert title here</title>
+    <script type="text/javascript" src="bootstrap/jquery.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="bootstrap/js/angular.js"></script>
+    <script type="text/javascript" src="bootstrap/js/angular-cookies.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+</head>
+<body ng-app="news">
+<div ng-controller="userLogin">
+    <button ng-click="userLogin()">login</button>
+    {{currentUser.username}}
+</div>
+
+<div ng-controller="userRegister">
+    <button ng-click="userRegister()">register</button>
+</div>
+</body>
+</html>
