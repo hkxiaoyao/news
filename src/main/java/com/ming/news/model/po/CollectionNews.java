@@ -21,10 +21,6 @@ public class CollectionNews {
 
     private String author;
 
-    private Integer pv;
-
-    private Integer commentNumber;
-
     private Date createTime;
 
     private Integer userId;

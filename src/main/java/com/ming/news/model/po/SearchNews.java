@@ -17,12 +17,6 @@ public class SearchNews {
 
     private String title;
 
-    private String summary;
-
-    private String author;
-
-    private Integer pv;
-
     private Integer commentNumber;
 
     private Date createTime;

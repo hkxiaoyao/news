@@ -10,9 +10,7 @@ import com.ming.news.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Create by ming on 19-1-5 上午11:24
@@ -62,7 +60,6 @@ public class NewsServiceImpl implements NewsService {
         news.setCreateTime(new Date());
         news.setUserId(user.getUserId());
         newsDao.insert(news);
-        System.out.println(news);
         List<Integer> tagIds = new ArrayList<>();
         for (Tag tag1 : tagList) {
             tagIds.add(tag1.getTagId());
@@ -95,21 +92,19 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public RequestResult addComment(Comment comment) {
         comment.setCreateTime(new Date());
-        System.out.println(comment);
         commentDao.insert(comment);
-        newsDao.updateComment(comment.getNewsId());
         List<Comment> comments = newsDao.getComment(comment.getNewsId());
         return new RequestResult<>(StatEnum.OK, comments);
     }
 
     @Override
     public RequestResult collectNews(Integer userId, Integer newsId) {
-        if (newsDao.findCollection(userId, newsId) == 1) {
-            return new RequestResult(0, "已经收藏过该文章");
-        }
-        newsDao.insertCollection(userId, newsId);
-        newsDao.updateCollection(newsId);
-        return new RequestResult(1, "收藏成功");
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("newsId", newsId);
+        map.put("result", null);
+        newsDao.insertCollection(map);
+        return new RequestResult(1, map.get("result").toString());
     }
 
     @Override
@@ -120,7 +115,6 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public RequestResult cancelCollection(Integer userId, Integer newsId) {
         newsDao.deleteCollection(userId, newsId);
-        newsDao.decreaseCollection(newsId);
         return new RequestResult(1, "取消成功");
     }
 

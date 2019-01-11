@@ -32,6 +32,8 @@ public class NewsDetail {
 
     private String categoryName;
 
+    private Integer categoryId;
+
     private List<Tag> tags;
 
     private List<Comment> comments;

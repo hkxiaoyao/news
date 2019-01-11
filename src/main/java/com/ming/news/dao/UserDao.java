@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Create by ming on 19-1-4 下午8:23
@@ -59,22 +60,11 @@ public interface UserDao {
     List<User> getSubscription(@Param("userId") Integer userId);
 
     /**
-     * 查找订阅关系
-     *
-     * @param userId   用户ID
-     * @param authorId 作者ID
-     * @return int
-     */
-    int findSubscription(@Param("userId") Integer userId, @Param("authorId") Integer authorId);
-
-    /**
      * 订阅作者
      *
-     * @param userId   用户ID
-     * @param authorId 作者ID
-     * @return int
+     * @param map 作者ID和用户ID
      */
-    int subscribeAuthor(@Param("userId") Integer userId, @Param("authorId") Integer authorId);
+    void subscribeAuthor(Map<String, Object> map);
 
     /**
      * 取消订阅作者
@@ -84,22 +74,6 @@ public interface UserDao {
      * @return int
      */
     int cancelSubscribeAuthor(@Param("userId") Integer userId, @Param("authorId") Integer authorId);
-
-    /**
-     * 增加订阅量
-     *
-     * @param userId 用户ID
-     * @return int
-     */
-    int increaseSubscribeNumber(@Param("userId") Integer userId);
-
-    /**
-     * 减少订阅量
-     *
-     * @param userId 用户ID
-     * @return int
-     */
-    int decreaseSubscribeNumber(@Param("userId") Integer userId);
 
     /**
      * 更新头像

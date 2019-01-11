@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Create by ming on 19-1-4 下午8:23
@@ -62,13 +64,13 @@ public class UserServiceImpl implements UserService {
     public RequestResult subscribe(Integer userId, Integer authorId) {
         if (userId.equals(authorId)) {
             return new RequestResult(0, "不能订阅自己");
-        } else if (userDao.findSubscription(userId, authorId) == 1) {
-            return new RequestResult(0, "不能重复订阅");
-        } else {
-            userDao.subscribeAuthor(userId, authorId);
-            userDao.increaseSubscribeNumber(authorId);
         }
-        return new RequestResult(1, "订阅成功");
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("authorId", authorId);
+        map.put("result", null);
+        userDao.subscribeAuthor(map);
+        return new RequestResult(1, (String) map.get("result"));
     }
 
     @Override
@@ -86,7 +88,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public RequestResult delSubscription(Integer userId, Integer authorId) {
         userDao.cancelSubscribeAuthor(userId, authorId);
-        userDao.decreaseSubscribeNumber(authorId);
         return new RequestResult<>(StatEnum.OK);
     }
 }

@@ -18,15 +18,9 @@
                 #{user.password}, #{user.imagePath},
                 #{user.createTime})
     </insert>
-    <insert id="subscribeAuthor">
-        insert into subscribe (user_id, author_id)
-        values (#{userId}, #{authorId});
-    </insert>
-    <update id="increaseSubscribeNumber">
-        UPDATE user
-        set subscribe_number = subscribe_number + 1
-        where user_id = #{userId}
-    </update>
+    <select id="subscribeAuthor" statementType="CALLABLE">
+        call subscribe_author(#{userId, mode=IN}, #{authorId, mode=IN}, #{result, mode=OUT, jdbcType=VARCHAR});
+    </select>
     <update id="updateImage">
         update user
         set image_path = #{imagePath}
@@ -35,11 +29,6 @@
     <update id="updateIntroduction">
         update user
         set brief_introduction = #{content}
-        where user_id = #{userId}
-    </update>
-    <update id="decreaseSubscribeNumber">
-        UPDATE user
-        set subscribe_number = subscribe_number - 1
         where user_id = #{userId}
     </update>
     <delete id="cancelSubscribeAuthor">
@@ -84,12 +73,6 @@
         from user u
                  left join subscribe s on u.user_id = s.author_id
         where s.user_id = #{userId}
-    </select>
-    <select id="findSubscription" resultType="java.lang.Integer">
-        SELECT COUNT(*)
-        from subscribe
-        where user_id = #{userId}
-          and author_id = #{authorId}
     </select>
 
     <resultMap id="authorMap" type="com.ming.news.model.po.User">

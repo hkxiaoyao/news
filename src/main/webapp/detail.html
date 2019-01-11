@@ -13,6 +13,10 @@
             <span class="sub" ng-bind="newsDetail.createTime|date:' yyyy-MM-dd HH:mm'"></span>
             &nbsp;&nbsp;阅读量
             <span class="sub" ng-bind="newsDetail.pv"></span>
+            &nbsp;&nbsp;分类:&nbsp;
+            <span class="sub"><a href="#/index/{{newsDetail.categoryId}}" ng-bind="newsDetail.categoryName"></a></span>
+            &nbsp;&nbsp;标签:&nbsp;
+            <span class="sub" ng-bind="tagName"></span>
             <span class="right"><a href="javascript:" ng-click="addcollection(newsDetail.newsId)">收藏</a></span>
         </div>
         <div class="article-content detail-content" ng-bind-html="newsDetail.content | to_html"></div>

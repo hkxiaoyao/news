@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ming
@@ -103,46 +104,10 @@ public interface NewsDao {
     int updatePv(@Param("newsId") Integer newsId);
 
     /**
-     * 增加评论量
-     *
-     * @param newsId 新闻ID
-     * @return int
-     */
-    int updateComment(@Param("newsId") Integer newsId);
-
-    /**
-     * 增加收藏量
-     *
-     * @param newsId 新闻ID
-     * @return int
-     */
-    int updateCollection(@Param("newsId") Integer newsId);
-
-    /**
-     * 减少收藏量
-     *
-     * @param newsId 新闻ID
-     * @return int
-     */
-    int decreaseCollection(@Param("newsId") Integer newsId);
-
-    /**
      * 插入收藏关系
-     *
-     * @param userId 用户ID
-     * @param newsId 新闻ID
-     * @return int
+     * @param map map
      */
-    int insertCollection(@Param("userId") Integer userId, @Param("newsId") Integer newsId);
-
-    /**
-     * 查找收藏关系
-     *
-     * @param userId 用户ID
-     * @param newsId 新闻ID
-     * @return int
-     */
-    int findCollection(@Param("userId") Integer userId, @Param("newsId") Integer newsId);
+    void insertCollection(Map<String, Object> map);
 
     /**
      * 删除收藏关系

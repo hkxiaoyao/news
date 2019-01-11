@@ -2,6 +2,7 @@ app.controller('indexCtrl', function ($scope, $http, $stateParams) {
     var categoryId = $stateParams.categoryId;
     $scope.indexNews = [];
     $scope.realtimeNews = [];
+    // 分类新闻
     $http({
         method: 'get',
         url: 'news/index/' + categoryId
@@ -16,7 +17,6 @@ app.controller('indexCtrl', function ($scope, $http, $stateParams) {
     }).success(function (m) {
         $scope.realtimeNews = m.data;
     });
-
 });
 
 app.controller('navCtrl', function ($scope, $http) {
@@ -35,6 +35,8 @@ app.controller('navCtrl', function ($scope, $http) {
 app.controller('detailCtrl', function ($scope, $http, $stateParams, $window, currentUser) {
     $scope.newsDetail = [];
     $scope.comments = [];
+    $scope.tags = [];
+    $scope.tagName = "";
 
     $scope.addComment = function (comment) {
         $scope.comments.push(comment);
@@ -51,6 +53,10 @@ app.controller('detailCtrl', function ($scope, $http, $stateParams, $window, cur
     }).success(function (m) {
         $scope.newsDetail = m.data;
         $scope.comments = $scope.newsDetail.comments;
+        $scope.tags = $scope.newsDetail.tags;
+        for (var i = 0; i < $scope.tags.length; i++) {
+            $scope.tagName = $scope.tags[i].tagName + "  ";
+        }
     });
 
     // 评论
@@ -67,7 +73,7 @@ app.controller('detailCtrl', function ($scope, $http, $stateParams, $window, cur
                 if (m.data.state !== 1) {
                     $window.sessionStorage.setItem("user", "");
                     alert("请登录");
-                    window.location.href = "#/index";
+                    window.location.href = "#/index/1";
                 } else {
                     comment = {"content": $scope.userComment, "newsId": newsId};
                     $http({
@@ -112,7 +118,7 @@ app.controller("addnewsCtrl", function ($scope, $http, $window, currentUser) {
     var userString = $window.sessionStorage.getItem("user");
     if (userString == null || userString === "") {
         alert("请登录");
-        window.location.href = "#/index";
+        window.location.href = "#/index/1";
     } else {
         var currentuser = JSON.parse(userString);
         var token = currentuser.token;
@@ -255,7 +261,7 @@ app.controller('login', function ($scope, $http, loginService, $window, currentU
             if (m.state === 1) {
                 $scope.currentuser = [];
                 $scope.logined = false;
-                window.location.href = "#/index"
+                window.location.href = "#/index/1"
             }
         });
     };
@@ -280,7 +286,7 @@ app.controller('collect', function ($scope, $http, $window, currentUser) {
     var userString = $window.sessionStorage.getItem("user");
     if (userString == null || userString === "") {
         alert("请登录");
-        window.location.href = "#/index";
+        window.location.href = "#/index/1";
     } else {
         var currentuser = JSON.parse(userString);
         var token = currentuser.token;
@@ -288,7 +294,7 @@ app.controller('collect', function ($scope, $http, $window, currentUser) {
             if (m.data.state !== 1) {
                 $window.sessionStorage.setItem("user", "");
                 alert("请登录");
-                window.location.href = "#/index";
+                window.location.href = "#/index/1";
             }
         });
     }
@@ -322,7 +328,7 @@ app.controller('subscription', function ($scope, $http, $window, currentUser) {
     var userString = $window.sessionStorage.getItem("user");
     if (userString == null || userString === "") {
         alert("请登录");
-        window.location.href = "#/index";
+        window.location.href = "#/index/1";
     } else {
         var currentuser = JSON.parse(userString);
         var token = currentuser.token;
@@ -330,7 +336,7 @@ app.controller('subscription', function ($scope, $http, $window, currentUser) {
             if (m.data.state !== 1) {
                 $window.sessionStorage.setItem("user", "");
                 alert("请登录");
-                window.location.href = "#/index";
+                window.location.href = "#/index/1";
             }
         });
     }
@@ -366,7 +372,7 @@ app.controller('usermessage', function ($scope, $http, FileUploader, $window, cu
     var userString = $window.sessionStorage.getItem("user");
     if (userString == null || userString === "") {
         alert("请登录");
-        window.location.href = "#/index";
+        window.location.href = "#/index/1";
     } else {
         var currentuser = JSON.parse(userString);
         var token = currentuser.token;
@@ -374,7 +380,7 @@ app.controller('usermessage', function ($scope, $http, FileUploader, $window, cu
             if (m.data.state !== 1) {
                 $window.sessionStorage.setItem("user", "");
                 alert("请登录");
-                window.location.href = "#/index";
+                window.location.href = "#/index/1";
             }
         });
     }
@@ -453,7 +459,7 @@ app.controller('newsShow', function ($scope, $http, $window, currentUser) {
     var userString = $window.sessionStorage.getItem("user");
     if (userString == null || userString === "") {
         alert("请登录");
-        window.location.href = "#/index";
+        window.location.href = "#/index/1";
     } else {
         var currentuser = JSON.parse(userString);
         var token = currentuser.token;
@@ -461,7 +467,7 @@ app.controller('newsShow', function ($scope, $http, $window, currentUser) {
             if (m.data.state !== 1) {
                 $window.sessionStorage.setItem("user", "");
                 alert("请登录");
-                window.location.href = "#/index";
+                window.location.href = "#/index/1";
             }
         });
     }
@@ -494,7 +500,7 @@ app.controller('newsShow', function ($scope, $http, $window, currentUser) {
  * 作者详情
  */
 app.controller('authorInfo', function ($scope, $http, $stateParams, $window, currentUser) {
-
+    // 新闻列表
     $scope.newsList = [];
     $scope.newsListsize = 0;
     $scope.author = "";

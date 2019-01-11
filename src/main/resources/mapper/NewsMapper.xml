@@ -15,11 +15,11 @@
     <insert id="insert" parameterType="com.ming.news.model.po.News" useGeneratedKeys="true"
             keyProperty="news.newsId">
         insert into news (title, summary,
-                          `state`, create_time,
-                          update_time, user_id, pv, content, category_id)
+                          create_time,
+                          user_id, pv, content, category_id)
         values (#{news.title}, #{news.summary},
-                #{news.state}, #{news.createTime},
-                #{news.updateTime}, #{news.userId}, #{news.pv}, #{news.content}, #{news.category.categoryId})
+                #{news.createTime},
+                #{news.userId}, #{news.pv}, #{news.content}, #{news.category.categoryId})
     </insert>
     <insert id="insertTag" useGeneratedKeys="true" keyProperty="tag.tagId">
         insert into tag(tag_name)
@@ -27,33 +27,16 @@
     </insert>
     <insert id="insertNewsTagRelation">
         INSERT into news_tag(news_id, tag_id) VALUES
-
         <foreach collection="tagIds" index="index" item="tagId" separator=",">
             (#{newsId}, #{tagId})
         </foreach>
     </insert>
-    <insert id="insertCollection">
-        INSERT into collection(news_id, user_id)
-        VALUES (#{newsId}, #{userId})
-    </insert>
+    <select id="insertCollection" statementType="CALLABLE">
+        call collect_news(#{userId, mode=IN}, #{newsId, mode=IN}, #{result, mode=OUT, jdbcType=VARCHAR});
+    </select>
     <update id="updatePv">
         update news
         set pv = pv + 1
-        where news_id = #{newsId};
-    </update>
-    <update id="updateComment">
-        update news
-        set comment_number = comment_number + 1
-        where news_id = #{newsId};
-    </update>
-    <update id="updateCollection">
-        update news
-        set collection = collection + 1
-        where news_id = #{newsId};
-    </update>
-    <update id="decreaseCollection">
-        update news
-        set collection = collection - 1
         where news_id = #{newsId};
     </update>
     <select id="findByTagName" resultType="com.ming.news.model.po.Tag">
@@ -65,6 +48,7 @@
     <select id="getRealtimeNews" resultType="com.ming.news.model.po.News">
         SELECT news_id, title
         from news
+        order by create_time desc
         limit 5
     </select>
     <select id="getIndexNews" resultType="com.ming.news.model.po.IndexNews">
@@ -96,12 +80,6 @@
                  left join tag t on t.tag_id = nt.tag_id
                  left join news n on nt.news_id = n.news_id
         where n.news_id = #{newsId}
-    </select>
-    <select id="findCollection" resultType="java.lang.Integer">
-        SELECT COUNT(*)
-        from collection
-        where user_id = #{userId}
-          and news_id = #{newsId}
     </select>
     <select id="getCollectionNews" resultType="com.ming.news.model.po.CollectionNews">
         SELECT *
